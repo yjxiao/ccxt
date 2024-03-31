@@ -124,7 +124,7 @@ export default class binance extends Exchange {
                 'fetchPositionMode': true,
                 'fetchPositions': true,
                 'fetchPositionsRisk': true,
-                'fetchPremiumIndexOHLCV': false,
+                'fetchPremiumIndexOHLCV': true,
                 'fetchSettlementHistory': true,
                 'fetchStatus': true,
                 'fetchTicker': true,
@@ -771,6 +771,7 @@ export default class binance extends Exchange {
                         'continuousKlines': { 'cost': 1, 'byLimit': [ [ 99, 1 ], [ 499, 2 ], [ 1000, 5 ], [ 10000, 10 ] ] },
                         'markPriceKlines': { 'cost': 1, 'byLimit': [ [ 99, 1 ], [ 499, 2 ], [ 1000, 5 ], [ 10000, 10 ] ] },
                         'indexPriceKlines': { 'cost': 1, 'byLimit': [ [ 99, 1 ], [ 499, 2 ], [ 1000, 5 ], [ 10000, 10 ] ] },
+                        'premiumIndexKlines': { 'cost': 1, 'byLimit': [ [ 99, 1 ], [ 499, 2 ], [ 1000, 5 ], [ 10000, 10 ] ] },
                         'fundingRate': 1,
                         'fundingInfo': 1,
                         'premiumIndex': 1,
@@ -4244,6 +4245,12 @@ export default class binance extends Exchange {
                 response = await this.dapiPublicGetIndexPriceKlines (this.extend (request, params));
             } else {
                 response = await this.fapiPublicGetIndexPriceKlines (this.extend (request, params));
+            }
+        } else if (price === 'premiumIndex') {
+            if (market['inverse']) {
+                response = await this.dapiPublicGetPremiumIndexKlines (this.extend (request, params));
+            } else {
+                response = await this.fapiPublicGetPremiumIndexKlines (this.extend (request, params));
             }
         } else if (market['linear']) {
             response = await this.fapiPublicGetKlines (this.extend (request, params));
